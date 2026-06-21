@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
+import ast
 import unittest
 
 
@@ -114,6 +115,39 @@ class ParsingTests(unittest.TestCase):
             ),
             "rainy",
         )
+
+    def test_weather_entity_forecast_method_is_not_property(self) -> None:
+        weather_path = (
+            Path(__file__).resolve().parents[1]
+            / "custom_components"
+            / "kraichtal_wetter"
+            / "weather.py"
+        )
+        module = ast.parse(weather_path.read_text(encoding="utf-8"))
+
+        weather_class = next(
+            node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "KraichtalWeatherEntity"
+        )
+        forecast_method = next(
+            node
+            for node in weather_class.body
+            if isinstance(node, ast.AsyncFunctionDef) and node.name == "async_forecast_daily"
+        )
+
+        decorator_names = [
+            decorator.id for decorator in forecast_method.decorator_list if isinstance(decorator, ast.Name)
+        ]
+        self.assertNotIn("property", decorator_names)
+
+        forecast_property = next(
+            node
+            for node in weather_class.body
+            if isinstance(node, ast.FunctionDef) and node.name == "forecast_daily"
+        )
+        property_decorators = [
+            decorator.id for decorator in forecast_property.decorator_list if isinstance(decorator, ast.Name)
+        ]
+        self.assertIn("property", property_decorators)
 
 
 if __name__ == "__main__":
