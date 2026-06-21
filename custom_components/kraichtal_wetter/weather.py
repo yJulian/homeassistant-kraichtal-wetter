@@ -6,7 +6,12 @@ from typing import Any
 
 from homeassistant.components.weather import WeatherEntity, WeatherEntityFeature
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfPressure, UnitOfSpeed, UnitOfTemperature
+from homeassistant.const import (
+    UnitOfLength,
+    UnitOfPressure,
+    UnitOfSpeed,
+    UnitOfTemperature,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -14,6 +19,7 @@ from .api import last_chart_value, wind_bearing_from_text
 from .const import ATTR_FORECAST, ATTR_RADAR, DOMAIN, NAME
 from .coordinator import KraichtalWetterCoordinator
 from .entity import KraichtalWetterEntity
+from .parsing import build_daily_forecast
 
 
 async def async_setup_entry(
@@ -34,6 +40,7 @@ class KraichtalWeatherEntity(KraichtalWetterEntity, WeatherEntity):
     _attr_native_temperature_unit = UnitOfTemperature.CELSIUS
     _attr_native_pressure_unit = UnitOfPressure.HPA
     _attr_native_wind_speed_unit = UnitOfSpeed.KILOMETERS_PER_HOUR
+    _attr_native_precipitation_unit = UnitOfLength.MILLIMETERS
 
     @property
     def supported_features(self) -> WeatherEntityFeature:
@@ -89,23 +96,10 @@ class KraichtalWeatherEntity(KraichtalWetterEntity, WeatherEntity):
         return wind_bearing_from_text(_current(self.coordinator.data, "windDir"))
 
     @property
-    def forecast_daily(self) -> list[dict[str, Any]] | None:
+    async def async_forecast_daily(self) -> list[dict[str, Any]] | None:
         """Return daily forecast data."""
-        forecast = (self.coordinator.data or {}).get(ATTR_FORECAST) or []
-        if not forecast:
-            return None
-
-        return [
-            {
-                "datetime": item["datetime"],
-                "condition": item.get("condition"),
-                "native_temperature": item.get("native_temperature"),
-                "native_templow": item.get("native_templow"),
-                "native_precipitation": item.get("native_precipitation"),
-                "precipitation_probability": item.get("precipitation_probability"),
-            }
-            for item in forecast
-        ]
+        forecast = (self.coordinator.data or {}).get(ATTR_FORECAST)
+        return build_daily_forecast(forecast)
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
