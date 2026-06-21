@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kraichtal Weather",
+        "description": "Adds weather data from kraichtal-wetter.de directly to Home Assistant.",
+        "data": {
+          "scan_interval": "Update interval (seconds)",
+          "include_forecast": "Load daily forecast from homepage",
+          "include_radar": "Load rain radar data"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kraichtal Weather",
+        "data": {
+          "scan_interval": "Update interval (seconds)",
+          "include_forecast": "Load daily forecast from homepage",
+          "include_radar": "Load rain radar data"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {"name": "Temperature"},
+      "humidity": {"name": "Humidity"},
+      "dewpoint": {"name": "Dew point"},
+      "feels_like": {"name": "Feels like"},
+      "pressure": {"name": "Pressure"},
+      "wind_speed": {"name": "Wind speed"},
+      "wind_gust": {"name": "Wind gust"},
+      "solar": {"name": "Solar radiation"},
+      "rain_today": {"name": "Rain today"},
+      "rain_24h": {"name": "Rain 24h"},
+      "rain_month": {"name": "Rain month"},
+      "rain_year": {"name": "Rain year"},
+      "temp_max_today": {"name": "Temperature max today"},
+      "temp_min_today": {"name": "Temperature min today"},
+      "wind_max_today": {"name": "Wind max today"},
+      "gust_max_today": {"name": "Gust max today"},
+      "radar_eta": {"name": "Radar rain ETA"},
+      "radar_duration": {"name": "Radar duration"},
+      "radar_total": {"name": "Radar precipitation"},
+      "radar_intensity": {"name": "Radar intensity"},
+      "radar_source": {"name": "Radar source"}
+    },
+    "binary_sensor": {
+      "radar_active": {"name": "Radar active"},
+      "raining_now": {"name": "Raining now"}
+    }
+  }
+}

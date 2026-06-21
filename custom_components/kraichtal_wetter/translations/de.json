@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Kraichtal Wetter",
+        "description": "Bindet die Wetterdaten von kraichtal-wetter.de direkt in Home Assistant ein.",
+        "data": {
+          "scan_interval": "Aktualisierungsintervall (Sekunden)",
+          "include_forecast": "Tagesvorhersage von der Startseite laden",
+          "include_radar": "Regenradar-Daten laden"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Kraichtal Wetter",
+        "data": {
+          "scan_interval": "Aktualisierungsintervall (Sekunden)",
+          "include_forecast": "Tagesvorhersage von der Startseite laden",
+          "include_radar": "Regenradar-Daten laden"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {"name": "Temperatur"},
+      "humidity": {"name": "Luftfeuchtigkeit"},
+      "dewpoint": {"name": "Taupunkt"},
+      "feels_like": {"name": "Gefuehlte Temperatur"},
+      "pressure": {"name": "Luftdruck"},
+      "wind_speed": {"name": "Windgeschwindigkeit"},
+      "wind_gust": {"name": "Windboee"},
+      "solar": {"name": "Solarstrahlung"},
+      "rain_today": {"name": "Regen heute"},
+      "rain_24h": {"name": "Regen 24h"},
+      "rain_month": {"name": "Regen Monat"},
+      "rain_year": {"name": "Regen Jahr"},
+      "temp_max_today": {"name": "Temperatur Maximum heute"},
+      "temp_min_today": {"name": "Temperatur Minimum heute"},
+      "wind_max_today": {"name": "Wind Maximum heute"},
+      "gust_max_today": {"name": "Boeen Maximum heute"},
+      "radar_eta": {"name": "Radar Regen ETA"},
+      "radar_duration": {"name": "Radar Dauer"},
+      "radar_total": {"name": "Radar Niederschlag"},
+      "radar_intensity": {"name": "Radar Intensitaet"},
+      "radar_source": {"name": "Radar Quelle"}
+    },
+    "binary_sensor": {
+      "radar_active": {"name": "Radar aktiv"},
+      "raining_now": {"name": "Es regnet aktuell"}
+    }
+  }
+}

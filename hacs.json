@@ -1,0 +1,8 @@
+{
+  "name": "Kraichtal Wetter",
+  "content_in_root": false,
+  "domains": ["kraichtal_wetter"],
+  "country": ["DE"],
+  "homeassistant": "2024.6.0",
+  "render_readme": true
+}

@@ -1,0 +1,13 @@
+{
+  "domain": "kraichtal_wetter",
+  "name": "Kraichtal Wetter",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://kraichtal-wetter.de/",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "loggers": ["custom_components.kraichtal_wetter"],
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.1.0"
+}
