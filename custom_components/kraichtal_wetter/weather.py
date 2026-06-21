@@ -45,7 +45,7 @@ class KraichtalWeatherEntity(KraichtalWetterEntity, WeatherEntity):
     @property
     def supported_features(self) -> WeatherEntityFeature:
         """Return supported weather features."""
-        if self.forecast_daily:
+        if self._daily_forecast_data():
             return WeatherEntityFeature.FORECAST_DAILY
         return WeatherEntityFeature(0)
 
@@ -95,15 +95,9 @@ class KraichtalWeatherEntity(KraichtalWetterEntity, WeatherEntity):
         """Return wind bearing in degrees."""
         return wind_bearing_from_text(_current(self.coordinator.data, "windDir"))
 
-    @property
-    def forecast_daily(self) -> list[dict[str, Any]] | None:
-        """Return cached daily forecast data for compatibility."""
-        forecast = (self.coordinator.data or {}).get(ATTR_FORECAST)
-        return build_daily_forecast(forecast)
-
     async def async_forecast_daily(self) -> list[dict[str, Any]] | None:
         """Return daily forecast data."""
-        return self.forecast_daily
+        return self._daily_forecast_data()
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
@@ -124,6 +118,11 @@ class KraichtalWeatherEntity(KraichtalWetterEntity, WeatherEntity):
                 "intensity": radar.get("intensity"),
             }
         return attrs
+
+    def _daily_forecast_data(self) -> list[dict[str, Any]] | None:
+        """Return parsed daily forecast data from the coordinator cache."""
+        forecast = (self.coordinator.data or {}).get(ATTR_FORECAST)
+        return build_daily_forecast(forecast)
 
 
 def _current(data: dict[str, Any] | None, key: str) -> Any:

@@ -139,15 +139,14 @@ class ParsingTests(unittest.TestCase):
         ]
         self.assertNotIn("property", decorator_names)
 
-        forecast_property = next(
+        supported_features = next(
             node
             for node in weather_class.body
-            if isinstance(node, ast.FunctionDef) and node.name == "forecast_daily"
+            if isinstance(node, ast.FunctionDef) and node.name == "supported_features"
         )
-        property_decorators = [
-            decorator.id for decorator in forecast_property.decorator_list if isinstance(decorator, ast.Name)
-        ]
-        self.assertIn("property", property_decorators)
+        source = ast.unparse(supported_features)
+        self.assertNotIn("forecast_daily", source)
+        self.assertIn("_daily_forecast_data", source)
 
 
 if __name__ == "__main__":
